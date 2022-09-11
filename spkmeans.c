@@ -199,10 +199,6 @@ void CalculateJacobi(Nsc *nsc) {
   /* Preform calculations until epsilon convergence or
    * num_iteration exceeds 100 */
   RunJacobiCalculations(a, a_tag, p, v, n, nsc);
-  /* Extract results */
-  for (i = 0; i < nsc->n; ++i) {
-    nsc->eigen_values[i] = a[i * n + i];
-  }
   /* Memory de-allocation */
   FreeMatrix(&a);
   FreeMatrix(&a_tag);
@@ -250,11 +246,15 @@ void RunJacobiCalculations(double a[],
                            int n,
                            Nsc *nsc) {
   /* Declerations */
-  int num_iteration = 0;
+  int num_iteration = 0, i;
   double convergence = nsc->epsilon + 1;
   /* v is the partial product of rotation matrecies p1p2p3... */
 
   while (num_iteration < 100 && convergence > nsc->epsilon) {
+    if(CheckDiagonal(a,n) == 1){
+      IdentityMatrix(nsc->eigen_vectors, n);
+      break;
+    }
     CalculateRotationMatrix(a, p, n, nsc); /* p is the rotation matrix for a */
     CalculateAPrimeEfficient(a, a_tag, nsc);
     convergence = (Off(a, n) - Off(a_tag, n));
@@ -263,9 +263,10 @@ void RunJacobiCalculations(double a[],
       CopyMatrix(v, nsc->eigen_vectors, n, n);
     MultiplyTwoMatrices(v, p, nsc->eigen_vectors, n);
     ++num_iteration;
-    if(CheckDiagonal(a,n) == 1){
-      break;
-    }
+  }
+  /* Extract results */
+  for (i = 0; i < nsc->n; ++i) {
+    nsc->eigen_values[i] = a[i * n + i];
   }
 }
 void FindPivot(const double a[],
