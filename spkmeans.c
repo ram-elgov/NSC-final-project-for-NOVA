@@ -249,7 +249,6 @@ void RunJacobiCalculations(double a[],
   int num_iteration = 0, i;
   double convergence = nsc->epsilon + 1;
   /* v is the partial product of rotation matrecies p1p2p3... */
-
   while (num_iteration < 100 && convergence > nsc->epsilon) {
     if(CheckDiagonal(a,n) == 1){
       IdentityMatrix(nsc->eigen_vectors, n);
