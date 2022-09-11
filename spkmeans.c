@@ -183,7 +183,7 @@ void CalculateJacobi(Nsc *nsc) {
   /* Declerations */
   double *p, *a_tag, *a, *v;
   /* v is the product of all rotation matrices p1p2p3... */
-  int i, n = nsc->n;
+  int n = nsc->n;
   /* Memory allocation and initializations */
   AllocateMatrix(&a, n, n);
   if (nsc->goal == FIT)
