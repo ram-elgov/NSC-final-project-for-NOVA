@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.23)
+project(test_spkmeans_lib C)
+set(CMAKE_C_STANDARD 90)
+add_executable(test_spkmeans_lib spkmeans.c spkmeans.h)
+target_link_libraries(test_spkmeans_lib m)
+find_package(PythonLibs REQUIRED)
+include_directories(${PYTHON_INCLUDE_DIRS})
+target_link_libraries(test_spkmeans_lib ${PYTHON_LIBRARIES})
